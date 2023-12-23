@@ -45,7 +45,7 @@ service:
     targetPort: 8581
   webhook:
     port: 51512
-    targetPort: 51812
+    targetPort: 51512
 
 ingress:
   enabled: false
