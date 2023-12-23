@@ -38,10 +38,12 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-          - containerPort: {{ .Values.service.web.targetPort }}
-            name: http
-          - containerPort: {{ .Values.service.webhook.targetPort }}
-            name: webhook
+          - name: http
+            containerPort: {{ .Values.service.web.targetPort }}
+          - name: webhook
+            containerPort: {{ .Values.service.webhook.targetPort }}
+          - name: bonjour
+            containerPort: {{ .Values.service.bonjour.targetPort }}
           livenessProbe:
             httpGet:
               path: /

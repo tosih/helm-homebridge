@@ -46,6 +46,9 @@ service:
   webhook:
     port: 51512
     targetPort: 51512
+  bonjour:
+    port: 5353
+    targetPort: 5353
 
 ingress:
   enabled: false

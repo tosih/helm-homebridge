@@ -1,19 +1,54 @@
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "homebridge.fullname" . }}
+  name: {{ include "homebridge.fullname" . }}-web
   labels:
     {{- include "homebridge.labels" . | nindent 4 }}
+  annotations:
+    metallb.universe.tf/allow-shared-ip: {{ include "homebridge.fullname" . }}
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - name: http
-      port: {{ .Values.service.web.port }}
-      protocol: TCP
-      targetPort: {{ .Values.service.web.targetPort }}
-    - name: webhook
-      port: {{ .Values.service.webhook.port }}
-      protocol: TCP
-      targetPort: {{ .Values.service.webhook.targetPort }}
+  - name: http
+    port: {{ .Values.service.web.port }}
+    protocol: TCP
+    targetPort: {{ .Values.service.web.targetPort }}
+  selector:
+    {{- include "homebridge.selectorLabels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "homebridge.fullname" . }}-bonjour
+  labels:
+    {{- include "homebridge.labels" . | nindent 4 }}
+  annotations:
+    metallb.universe.tf/allow-shared-ip: {{ include "homebridge.fullname" . }}
+spec:
+  type: LoadBalancer
+  ports:
+  - name: bonjour
+    port: {{ .Values.service.bonjour.port }}
+    protocol: TCP
+    targetPort: {{ .Values.service.bonjour.targetPort }}
+  selector:
+    {{- include "homebridge.selectorLabels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "homebridge.fullname" . }}-webhook
+  labels:
+    {{- include "homebridge.labels" . | nindent 4 }}
+  annotations:
+    metallb.universe.tf/allow-shared-ip: {{ include "homebridge.fullname" . }}
+spec:
+  type: LoadBalancer
+  ports:
+  - name: webhook
+    port: {{ .Values.service.webhook.port }}
+    protocol: TCP
+    targetPort: {{ .Values.service.webhook.targetPort }}
   selector:
     {{- include "homebridge.selectorLabels" . | nindent 4 }}
