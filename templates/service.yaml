@@ -7,9 +7,13 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
+    - name: http
+      port: {{ .Values.service.web.port }}
       protocol: TCP
-      name: http
+      targetPort: {{ .Values.service.web.targetPort }}
+    - name: webhook
+      port: {{ .Values.service.webhook.port }}
+      protocol: TCP
+      targetPort: {{ .Values.service.webhook.targetPort }}
   selector:
     {{- include "homebridge.selectorLabels" . | nindent 4 }}

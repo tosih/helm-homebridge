@@ -36,11 +36,16 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
-timezone: 'America/Chicago'
+timezone: 'America/Los_Angeles'
 
 service:
-  type: ClusterIP
-  port: 80
+  type: LoadBalancer
+  web:
+    port: 80
+    targetPort: 8581
+  webhook:
+    port: 51512
+    targetPort: 51812
 
 ingress:
   enabled: false
@@ -63,12 +68,12 @@ resources: {}
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  limits:
-    cpu: 100m
-    memory: 1024Mi
-  requests:
-    cpu: 50m
-    memory: 256Mi
+  # limits:
+  #   cpu: 100m
+  #   memory: 1024Mi
+  # requests:
+  #   cpu: 50m
+  #   memory: 256Mi
 
 autoscaling:
   enabled: false

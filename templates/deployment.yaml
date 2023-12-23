@@ -34,9 +34,10 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
-              containerPort: {{ .Values.service.port }}
-              protocol: TCP
+          - containerPort: {{ .Values.service.web.targetPort }}
+            name: http
+          - containerPort: {{ .Values.service.webhook.targetPort }}
+            name: webhook
           livenessProbe:
             httpGet:
               path: /
@@ -47,6 +48,13 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+          - name: homebridge
+            mountPath: /homebridge
+      volumes:
+      - name: {{ include "homebridge.fullname" . }}
+        persistentVolumeClaim:
+          claimName: {{ include "homebridge.fullname" . }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
