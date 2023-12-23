@@ -57,10 +57,15 @@ spec:
           volumeMounts:
           - name: homebridge
             mountPath: /homebridge
+          - name: homebridge-plugins
+            mountPath: /opt/homebridge
       volumes:
       - name: {{ include "homebridge.fullname" . }}
         persistentVolumeClaim:
           claimName: {{ include "homebridge.fullname" . }}
+      - name: {{ include "homebridge.fullname" . }}-plugins
+        persistentVolumeClaim:
+          claimName: {{ include "homebridge.fullname" . }}-plugins
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
