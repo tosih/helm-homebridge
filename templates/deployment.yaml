@@ -58,7 +58,7 @@ spec:
           - name: homebridge
             mountPath: /homebridge
           - name: homebridge-plugins
-            mountPath: /opt/homebridge
+            mountPath: /opt/homebridge/test
       volumes:
       - name: {{ include "homebridge.fullname" . }}
         persistentVolumeClaim:
